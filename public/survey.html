@@ -133,51 +133,43 @@
     <a href="#">| GitHub Repository</a>
 
 
-    <script type="text/javascript">
-        function Friend(name, photo, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10) {
-            this.name = name;
-            this.photo = photo;
-            this.scores = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10];
-        };
-
+    <script type="text/javascript">        
         let newFriend;
         let bestFriend = {
-            name : "",
+            name: "",
             pictureURL: ""
         }
 
         $("#submitbutton").click(function () {
-            let name = $("#nameinput").val();
-            let pic = $("#pictureinput").val();
-            let q1 = $("input[name=q1]:checked").val();
-            let q2 = $("input[name=q2]:checked").val();
-            let q3 = $("input[name=q3]:checked").val();
-            let q4 = $("input[name=q4]:checked").val();
-            let q5 = $("input[name=q5]:checked").val();
-            let q6 = $("input[name=q6]:checked").val();
-            let q7 = $("input[name=q7]:checked").val();
-            let q8 = $("input[name=q8]:checked").val();
-            let q9 = $("input[name=q9]:checked").val();
-            let q10 = $("input[name=q10]:checked").val();
+            newFriend = {
+                name: $("#nameinput").val(),
+                pic: $("#pictureinput").val(),
+                scores: [$("input[name=q1]:checked").val(), $("input[name=q2]:checked").val(), $("input[name=q3]:checked").val(), $("input[name=q4]:checked").val(), $("input[name=q5]:checked").val(), $("input[name=q6]:checked").val(), $("input[name=q7]:checked").val(), $("input[name=q8]:checked").val(), $("input[name=q9]:checked").val(), $("input[name=q10]:checked").val()]
+            }
 
-            newFriend = new Friend(name, pic, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
+            console.log(newFriend)
 
             compareFriends(newFriend.scores);
 
-            $.post("/api/friends", newFriend)
-                .then(function (data) {
-                    console.log("added: ", data);
-                });
+            $.post({ url: '/api/friends', contentType: 'application/json' }, JSON.stringify(newFriend));
         });
 
         function compareFriends(newScores) {
-            $.get("/api/friends")
-                .then(function (friendsArr) {
-                    console.log(friendsArr);
-                    friendsArr.forEach((friend) => {
-                        calculation(newFriend, friend);
-                    });
-                })
+            console.log("hit")
+            $.get("/api/friends", friendsArr => {
+                console.log("array:")
+                console.log(friendsArr);
+                friendsArr.forEach((friend) => {
+                    console.log(friend)
+                    calculation(newScores, friend.scores);
+                });
+                $("#bfName").text(bestFriend.name);
+                $("#bfpic").attr("src", bestFriend.pictureURL)
+            });
+        }
+
+        function calculation(you, them) {
+
         }
 
 
