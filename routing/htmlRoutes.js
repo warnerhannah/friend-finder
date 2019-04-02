@@ -1,15 +1,16 @@
-const express = require("express")
-const path = require("path");
-const app = express();
+const path = require("path")
+// const express = require("express")
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static('./javascript'))
-
-app.get("/", (req, res) => {
-    return res.sendFile(path.join(__dirname, "public/home.html"));
- });
-
- app.get("/survey", (req, res) => {
-    return res.sendFile(path.join(__dirname, "public/survey.html"));
- });
+module.exports = (app) => {
+   app.get("/", (req, res) => {
+      return res.sendFile(path.join(__dirname, "../public/home.html"));
+   });
+  
+   app.get("/survey", (req, res) => {
+      return res.sendFile(path.join(__dirname, "../public/survey.html"));
+   });
+  
+   app.get('/*', function(req,res){
+     return res.sendFile(path.join(__dirname, "../public/home.html"));
+  });
+}

@@ -1,9 +1,15 @@
-const express = require("express")
-const path = require("path");
-const app = express();
+const friendsArr = require("../data/friends.js")
 
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static('./javascript'))
-
+module.exports = (app) => {
+    app.post("/api/friends", (req, res) => {
+        console.log(req)
+        console.log("Displaying Friends")
+        res.json(friendsArr);
+    });
+    
+    app.get("/api/friends", (req, res) => {
+        let friend = req.body;
+        friendsArr.push(friend);
+        console.log("Friend Added")
+    });
+};

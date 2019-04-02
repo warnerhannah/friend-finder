@@ -33,7 +33,7 @@
                     <input type="radio" name="q1" value="2"> 2<br>
                     <input type="radio" name="q1" value="3"> 3<br>
                     <input type="radio" name="q1" value="4"> 4<br>
-                    <input type="radio" name="q1" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q1" value="5"> 5 (Strongly Agree)<br>
                 </div>
 
                 <div id="q2" style="padding-bottom: 20px">
@@ -43,7 +43,7 @@
                     <input type="radio" name="q2" value="2"> 2<br>
                     <input type="radio" name="q2" value="3"> 3<br>
                     <input type="radio" name="q2" value="4"> 4<br>
-                    <input type="radio" name="q2" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q2" value="5"> 5 (Strongly Agree)<br>
                 </div>
 
                 <div id="q3" style="padding-bottom: 20px">
@@ -53,7 +53,7 @@
                     <input type="radio" name="q3" value="2"> 2<br>
                     <input type="radio" name="q3" value="3"> 3<br>
                     <input type="radio" name="q3" value="4"> 4<br>
-                    <input type="radio" name="q3" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q3" value="5"> 5 (Strongly Agree)<br>
                 </div>
 
                 <div id="q4" style="padding-bottom: 20px">
@@ -63,7 +63,7 @@
                     <input type="radio" name="q4" value="2"> 2<br>
                     <input type="radio" name="q4" value="3"> 3<br>
                     <input type="radio" name="q4" value="4"> 4<br>
-                    <input type="radio" name="q4" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q4" value="5"> 5 (Strongly Agree)<br>
                 </div>
 
                 <div id="q5" style="padding-bottom: 20px">
@@ -73,7 +73,7 @@
                     <input type="radio" name="q5" value="2"> 2<br>
                     <input type="radio" name="q5" value="3"> 3<br>
                     <input type="radio" name="q5" value="4"> 4<br>
-                    <input type="radio" name="q5" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q5" value="5"> 5 (Strongly Agree)<br>
                 </div>
 
                 <div id="q6" style="padding-bottom: 20px">
@@ -83,7 +83,7 @@
                     <input type="radio" name="q6" value="2"> 2<br>
                     <input type="radio" name="q6" value="3"> 3<br>
                     <input type="radio" name="q6" value="4"> 4<br>
-                    <input type="radio" name="q6" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q6" value="5"> 5 (Strongly Agree)<br>
                 </div>
 
                 <div id="q7" style="padding-bottom: 20px">
@@ -93,7 +93,7 @@
                     <input type="radio" name="q7" value="2"> 2<br>
                     <input type="radio" name="q7" value="3"> 3<br>
                     <input type="radio" name="q7" value="4"> 4<br>
-                    <input type="radio" name="q7" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q7" value="5"> 5 (Strongly Agree)<br>
                 </div>
 
                 <div id="q8" style="padding-bottom: 20px">
@@ -103,7 +103,7 @@
                     <input type="radio" name="q8" value="2"> 2<br>
                     <input type="radio" name="q8" value="3"> 3<br>
                     <input type="radio" name="q8" value="4"> 4<br>
-                    <input type="radio" name="q8" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q8" value="5"> 5 (Strongly Agree)<br>
                 </div>
 
                 <div id="q9" style="padding-bottom: 20px">
@@ -113,7 +113,7 @@
                     <input type="radio" name="q9" value="2"> 2<br>
                     <input type="radio" name="q9" value="3"> 3<br>
                     <input type="radio" name="q9" value="4"> 4<br>
-                    <input type="radio" name="q9" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q9" value="5"> 5 (Strongly Agree)<br>
                 </div>
 
                 <div id="q10" style="padding-bottom: 20px">
@@ -123,14 +123,65 @@
                     <input type="radio" name="q10" value="2"> 2<br>
                     <input type="radio" name="q10" value="3"> 3<br>
                     <input type="radio" name="q10" value="4"> 4<br>
-                    <input type="radio" name="q10" value="1"> 5 (Strongly Agree)<br>
+                    <input type="radio" name="q10" value="5"> 5 (Strongly Agree)<br>
                 </div>
-                <a href="#" class="btn btn-primary">Submit Survey</a>
+                <a href="#" id="submitbutton" class="btn btn-primary">Submit Survey</a>
         </div>
     </div>
 
-    <a href="/api/friendslist">API Friends List |</a>
-    <a href="/githubrepo">| GitHub Repository</a>
+    <a href="/api/friends">API Friends List |</a>
+    <a href="#">| GitHub Repository</a>
+
+
+    <script type="text/javascript">
+        function Friend(name, photo, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10) {
+            this.name = name;
+            this.photo = photo;
+            this.scores = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10];
+        };
+
+        let newFriend;
+        let bestFriend = {
+            name : "",
+            pictureURL: ""
+        }
+
+        $("#submitbutton").click(function () {
+            let name = $("#nameinput").val();
+            let pic = $("#pictureinput").val();
+            let q1 = $("input[name=q1]:checked").val();
+            let q2 = $("input[name=q2]:checked").val();
+            let q3 = $("input[name=q3]:checked").val();
+            let q4 = $("input[name=q4]:checked").val();
+            let q5 = $("input[name=q5]:checked").val();
+            let q6 = $("input[name=q6]:checked").val();
+            let q7 = $("input[name=q7]:checked").val();
+            let q8 = $("input[name=q8]:checked").val();
+            let q9 = $("input[name=q9]:checked").val();
+            let q10 = $("input[name=q10]:checked").val();
+
+            newFriend = new Friend(name, pic, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
+
+            compareFriends(newFriend.scores);
+
+            $.post("/api/friends", newFriend)
+                .then(function (data) {
+                    console.log("added: ", data);
+                });
+        });
+
+        function compareFriends(newScores) {
+            $.get("/api/friends")
+                .then(function (friendsArr) {
+                    console.log(friendsArr);
+                    friendsArr.forEach((friend) => {
+                        calculation(newFriend, friend);
+                    });
+                })
+        }
+
+
+    </script>
 </body>
 
 </html>
