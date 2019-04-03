@@ -3,9 +3,10 @@
 
 <head>
     <title>FriendFinder | Survey</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
 <body class="container">
@@ -125,7 +126,7 @@
                     <input type="radio" name="q10" value="4"> 4<br>
                     <input type="radio" name="q10" value="5"> 5 (Strongly Agree)<br>
                 </div>
-                <a href="#" id="submitbutton" class="btn btn-primary">Submit Survey</a>
+                <button class="btn btn-primary" id="submitbutton" href="#" data-toggle="modal" data-target="#exampleModal">Find my Best Friend!</button>
         </div>
     </div>
 
@@ -140,7 +141,7 @@
             </div>
             <div class="modal-body">
               <p>Your Best Friend is: <span id="bfName"></span></p>
-              <img src="" id="bfPic" alt="Buddy Picture">
+              <img src="" alt="Best Friend Picture">
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -150,7 +151,7 @@
       </div>
 
     <a href="/api/friends">API Friends List |</a>
-    <a href="#">| GitHub Repository</a>
+    <a href="https://github.com/warnerhannah/friend-finder">| GitHub Repository</a>
 
 
     <script type="text/javascript">
@@ -161,7 +162,11 @@
             pictureURL: ""
         }
 
-        $("#submitbutton").click(function () {
+        let arrayLen = 0;
+
+        $("button").click(function (e) {
+            e.preventDefault();
+
             newFriend = {
                 name: $("#nameinput").val(),
                 pic: $("#pictureinput").val(),
@@ -170,19 +175,20 @@
 
             console.log(newFriend)
 
-            compareFriends(newFriend.scores);
+            compareFriends(newFriend);
 
             $.post({ url: '/api/friends', contentType: 'application/json' }, JSON.stringify(newFriend));
         });
 
-        function compareFriends(newScores) {
+        function compareFriends(newFriend) {
             console.log("hit")
             $.get("/api/friends", friendsArr => {
                 console.log("array:")
                 console.log(friendsArr);
+                arrayLen = friendsArr.length
                 friendsArr.forEach((friend) => {
                     console.log(friend)
-                    calculation(newScores, friend.scores);
+                    calculation(newFriend, friend);
                 });
                 $("#bfName").text(bestFriend.name);
                 $("#bfpic").attr("src", bestFriend.pictureURL)
@@ -192,25 +198,21 @@
 
         function calculation(you, them) {
             let totalDiff = 0;
-            let index = 0;
+            yourScores = parseInt(you.scores[i]);
+            theirScores = parseInt(them.scores[i]);
 
-            for (var i = 0; i < 10; i++) {
-                totalDiff += Math.abs(you[i] - them[i]);
-                index++;
+            for (var i = 0; i < arrayLen-1; i++) {
+                totalDiff += Math.abs(yourScores - theirScores);
             }
+            console.log(totalDiff)
 
-            if (index === 10){
                 if (totalDiff < bestFriend.totalDiff) {
                     bestFriend.totalDiff = totalDiff;
                     bestFriend.name = them.name;
                     bestFriend.pictureURL = them.pic;
                 };
-            }
-
             console.log(bestFriend)
         }
-
-
     </script>
 </body>
 
